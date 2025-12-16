@@ -56,6 +56,10 @@ namespace LibrarySystem.Forms
             
             // Автор
             AddInfoRow(infoPanel, "Автор:", application.Author, ref yPos, labelWidth, valueWidth);
+            // Жанр
+            AddInfoRow(infoPanel, "Жанр:", application.Genre, ref yPos, labelWidth, valueWidth);
+            // Год издания
+            AddInfoRow(infoPanel, "Год издания:", application.Year > 0 ? application.Year.ToString() : "", ref yPos, labelWidth, valueWidth);
             
             // ISBN
             AddInfoRow(infoPanel, "ISBN:", application.ISBN, ref yPos, labelWidth, valueWidth);

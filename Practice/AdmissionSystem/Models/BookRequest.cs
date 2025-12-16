@@ -9,6 +9,8 @@ namespace LibrarySystem.Models
         public int BookCategoryId { get; set; }
         public string BookTitle { get; set; }
         public string Author { get; set; }
+    public string Genre { get; set; }
+    public int Year { get; set; }
         public string ISBN { get; set; }
         public DateTime RequestDate { get; set; }
         public string Status { get; set; } // "На рассмотрении", "Одобрено", "Отклонено"
@@ -24,6 +26,8 @@ namespace LibrarySystem.Models
         {
             SubmissionDate = DateTime.Now;
             Status = "На рассмотрении";
+            Genre = string.Empty;
+            Year = 0;
         }
     }
 }

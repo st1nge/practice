@@ -17,7 +17,6 @@ namespace LibrarySystem.Forms
         private Button btnLogin;
         private Button btnRegister;
         private LinkLabel linkInstruction;
-        private string instructionPath;
         private Panel panelLeft;
         private Panel panelRight;
         private CheckBox chkShowPassword;
@@ -226,32 +225,6 @@ namespace LibrarySystem.Forms
             };
             linkInstruction.LinkClicked += LinkInstruction_LinkClicked;
 
-            // Определяем путь к инструкции: предпочитаем Resources рядом с exe, иначе корень проекта
-            try
-            {
-                string rootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Инструкция_пользователя.docx");
-                string resourcesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Инструкция_пользователя.docx");
-
-                if (File.Exists(resourcesPath))
-                {
-                    instructionPath = resourcesPath;
-                }
-                else if (File.Exists(rootPath))
-                {
-                    instructionPath = rootPath;
-                }
-                else
-                {
-                    // Если файл не найден, скрываем ссылку (удобнее, чем показывать сообщение об ошибке)
-                    linkInstruction.Visible = false;
-                }
-            }
-            catch
-            {
-                // При любых ошибках доступа просто скрываем ссылку
-                linkInstruction.Visible = false;
-            }
-
             // Добавление элементов на правую панель
             panelRight.Controls.Add(lblFormTitle);
             panelRight.Controls.Add(lblFormSubtitle);
@@ -353,25 +326,32 @@ namespace LibrarySystem.Forms
 
         private void LinkInstruction_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (string.IsNullOrEmpty(instructionPath) || !File.Exists(instructionPath))
+            // Сначала ищем в корне проекта
+            string rootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Инструкция_пользователя.docx");
+            string resourcesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Инструкция_пользователя.docx");
+
+            string instructionPath = File.Exists(rootPath) ? rootPath : resourcesPath;
+
+            if (File.Exists(instructionPath))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.GetFullPath(instructionPath),
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Не удалось открыть инструкцию: {ex.Message}",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
             {
                 MessageBox.Show("Файл инструкции не найден!", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = Path.GetFullPath(instructionPath),
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Не удалось открыть инструкцию: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

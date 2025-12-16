@@ -15,6 +15,8 @@ namespace LibrarySystem.Forms
         private TextBox txtBookTitle;
         private TextBox txtAuthor;
         private TextBox txtISBN;
+    private TextBox txtGenre;
+    private TextBox txtYear;
         private ComboBox cmbCategory;
         private Button btnSubmit;
         private Button btnCancel;
@@ -117,6 +119,44 @@ namespace LibrarySystem.Forms
             };
             yPosition += 70;
 
+            // Жанр
+            Label lblGenre = new Label
+            {
+                Text = "Жанр:",
+                Font = new Font("Segoe UI", 10),
+                Location = new Point(25, yPosition),
+                Size = new Size(100, 25)
+            };
+            txtGenre = new TextBox
+            {
+                Font = new Font("Segoe UI", 10),
+                Location = new Point(25, yPosition + 25),
+                Size = new Size(220, 25),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // Год издания
+            Label lblYear = new Label
+            {
+                Text = "Год издания:",
+                Font = new Font("Segoe UI", 10),
+                Location = new Point(260, yPosition),
+                Size = new Size(120, 25)
+            };
+            txtYear = new TextBox
+            {
+                Font = new Font("Segoe UI", 10),
+                Location = new Point(260, yPosition + 25),
+                Size = new Size(190, 25),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            yPosition += 70;
+
+            this.Controls.Add(lblGenre);
+            this.Controls.Add(txtGenre);
+            this.Controls.Add(lblYear);
+            this.Controls.Add(txtYear);
+
             // ISBN
             Label lblISBN = new Label
             {
@@ -212,12 +252,22 @@ namespace LibrarySystem.Forms
 
             try
             {
+                int yearParsed = 0;
+                if (!string.IsNullOrWhiteSpace(txtYear.Text) && !int.TryParse(txtYear.Text.Trim(), out yearParsed))
+                {
+                    MessageBox.Show("Некорректный формат года издания!", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 BookRequest request = new BookRequest
                 {
                     UserId = currentUser.Id,
                     BookCategoryId = ((BookCategory)cmbCategory.SelectedItem).Id,
                     BookTitle = txtBookTitle.Text.Trim(),
                     Author = txtAuthor.Text.Trim(),
+                    Genre = txtGenre.Text.Trim(),
+                    Year = yearParsed,
                     ISBN = txtISBN.Text.Trim()
                 };
 

@@ -414,11 +414,12 @@ namespace LibrarySystem.Forms
                             nameColumn.HeaderText = "Название";
                     }
 
+                    // Hide internal Code column from users
                     if (dgvSpecialties.Columns.Contains("Code"))
                     {
                         var codeColumn = dgvSpecialties.Columns["Code"];
                         if (codeColumn != null)
-                            codeColumn.HeaderText = "Код";
+                            codeColumn.Visible = false;
                     }
 
                     if (dgvSpecialties.Columns.Contains("BooksCount"))

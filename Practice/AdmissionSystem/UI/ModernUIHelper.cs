@@ -355,14 +355,38 @@ namespace LibrarySystem.UI
             };
 
             // Название книги (крупно)
-            string fullName = app.FullRequest ?? "Не указано";
-            Label lblName = new Label
+            string title = string.IsNullOrWhiteSpace(app.BookTitle) ? "Не указано" : app.BookTitle;
+            Label lblTitle = new Label
             {
-                Text = fullName.Length > 25 ? fullName.Substring(0, 22) + "..." : fullName,
+                Text = title.Length > 30 ? title.Substring(0, 27) + "..." : title,
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 ForeColor = TextPrimary,
                 Location = new Point(10, 10),
                 Size = new Size(310, 30),
+                BackColor = Color.Transparent
+            };
+
+            // Жанр и год
+            string genre = string.IsNullOrWhiteSpace(app.Genre) ? "Не указан" : app.Genre;
+            string year = app.Year > 0 ? app.Year.ToString() : "";
+            Label lblGenre = new Label
+            {
+                Text = $"Жанр: {genre}" + (string.IsNullOrEmpty(year) ? "" : $" | {year}"),
+                Font = new Font("Segoe UI", 9),
+                ForeColor = TextSecondary,
+                Location = new Point(10, 45),
+                Size = new Size(310, 25),
+                BackColor = Color.Transparent
+            };
+
+            // Автор
+            Label lblAuthor = new Label
+            {
+                Text = $"Автор: {app.Author}",
+                Font = new Font("Segoe UI", 9),
+                ForeColor = TextSecondary,
+                Location = new Point(10, 70),
+                Size = new Size(310, 25),
                 BackColor = Color.Transparent
             };
 
@@ -372,19 +396,20 @@ namespace LibrarySystem.UI
             {
                 Text = "Категория: " + (specialtyName.Length > 25 ? specialtyName.Substring(0, 22) + "..." : specialtyName),
                 Font = new Font("Segoe UI", 9),
-                ForeColor = TextSecondary,
-                Location = new Point(10, 45),
+                ForeColor = TextMuted,
+                Location = new Point(10, 95),
                 Size = new Size(310, 25),
                 BackColor = Color.Transparent
             };
 
-            // Автор
-            Label lblScore = new Label
+            // ISBN
+            string isbn = app.ISBN ?? "";
+            Label lblISBN = new Label
             {
-                Text = $"Автор: {app.Author}",
+                Text = $"ISBN: {isbn}",
                 Font = new Font("Segoe UI", 9),
-                ForeColor = TextSecondary,
-                Location = new Point(10, 70),
+                ForeColor = TextMuted,
+                Location = new Point(10, 120),
                 Size = new Size(310, 25),
                 BackColor = Color.Transparent
             };
@@ -396,19 +421,7 @@ namespace LibrarySystem.UI
                 Text = $"Дата: {submittedAt}",
                 Font = new Font("Segoe UI", 9),
                 ForeColor = TextMuted,
-                Location = new Point(10, 95),
-                Size = new Size(310, 25),
-                BackColor = Color.Transparent
-            };
-
-            // ISBN
-            string isbn = app.ISBN ?? "";
-            Label lblPassport = new Label
-            {
-                Text = $"ISBN: {isbn}",
-                Font = new Font("Segoe UI", 9),
-                ForeColor = TextMuted,
-                Location = new Point(10, 120),
+                Location = new Point(10, 145),
                 Size = new Size(310, 25),
                 BackColor = Color.Transparent
             };
@@ -426,11 +439,12 @@ namespace LibrarySystem.UI
             };
 
             // Добавляем все элементы на карточку
-            card.Controls.Add(lblName);
+            card.Controls.Add(lblTitle);
+            card.Controls.Add(lblGenre);
+            card.Controls.Add(lblAuthor);
             card.Controls.Add(lblSpecialty);
-            card.Controls.Add(lblScore);
+            card.Controls.Add(lblISBN);
             card.Controls.Add(lblDate);
-            card.Controls.Add(lblPassport);
             card.Controls.Add(lblStatus);
 
             // Обработчик клика

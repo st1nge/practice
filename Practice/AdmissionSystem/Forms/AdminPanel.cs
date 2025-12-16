@@ -591,11 +591,12 @@ namespace LibrarySystem.Forms
                             nameColumn.HeaderText = "Название";
                     }
 
+                    // Скрываем внутренний столбец Code — он не нужен в UI
                     if (dgvSpecialties.Columns.Contains("Code"))
                     {
                         var codeColumn = dgvSpecialties.Columns["Code"];
                         if (codeColumn != null)
-                            codeColumn.HeaderText = "Код";
+                            codeColumn.Visible = false;
                     }
 
                     if (dgvSpecialties.Columns.Contains("BooksCount"))
@@ -621,6 +622,12 @@ namespace LibrarySystem.Forms
                     dgvSpecialties.DataSource = null;
                 }
             }
+        }
+
+        // Публичный метод, чтобы другие формы (например, SpecialtyEditForm) могли запросить обновление списка категорий
+        public void RefreshSpecialties()
+        {
+            LoadSpecialties();
         }
 
         private void LoadUsers()
@@ -674,6 +681,30 @@ namespace LibrarySystem.Forms
                         var roleColumn = dgvUsers.Columns["Role"];
                         if (roleColumn != null)
                             roleColumn.HeaderText = "Роль";
+                    }
+                    if (dgvUsers.Columns.Contains("Phone"))
+                    {
+                        var phoneColumn = dgvUsers.Columns["Phone"];
+                        if (phoneColumn != null)
+                            phoneColumn.HeaderText = "Телефон";
+                    }
+                    if (dgvUsers.Columns.Contains("Email"))
+                    {
+                        var emailColumn = dgvUsers.Columns["Email"];
+                        if (emailColumn != null)
+                            emailColumn.HeaderText = "Email";
+                    }
+                    if (dgvUsers.Columns.Contains("Address"))
+                    {
+                        var addrColumn = dgvUsers.Columns["Address"];
+                        if (addrColumn != null)
+                            addrColumn.HeaderText = "Прописка";
+                    }
+                    if (dgvUsers.Columns.Contains("ParentPhone"))
+                    {
+                        var parentColumn = dgvUsers.Columns["ParentPhone"];
+                        if (parentColumn != null)
+                            parentColumn.HeaderText = "Телефон родителей";
                     }
                 }
             }
@@ -750,10 +781,10 @@ namespace LibrarySystem.Forms
             try
             {
                 SpecialtyEditForm form = new SpecialtyEditForm();
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    LoadSpecialties();
-                }
+                // Передаём this как Owner, чтобы форма могла уведомить админ-панель об изменениях в реальном времени
+                form.ShowDialog(this);
+                // Reload specialties regardless of dialog result because the form may have saved a new category
+                LoadSpecialties();
             }
             catch (Exception)
             {
@@ -775,7 +806,8 @@ namespace LibrarySystem.Forms
             {
                 var specialty = (BookCategory)dgvSpecialties.SelectedRows[0].DataBoundItem;
                 SpecialtyEditForm form = new SpecialtyEditForm(specialty);
-                if (form.ShowDialog() == DialogResult.OK)
+                // Передаём this как Owner, чтобы форма могла уведомить админ-панель об изменениях в реальном времени
+                if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadSpecialties();
                 }

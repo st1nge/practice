@@ -14,6 +14,10 @@ namespace LibrarySystem.Forms
         private TextBox txtPassword;
         private TextBox txtConfirmPassword;
         private TextBox txtFullName;
+    private TextBox txtPhone;
+    private TextBox txtEmail;
+    private TextBox txtAddress;
+    private TextBox txtParentPhone;
         private Button btnRegister;
         private Button btnCancel;
         private CheckBox chkShowPassword;
@@ -25,7 +29,7 @@ namespace LibrarySystem.Forms
 
         private void InitializeComponent()
         {
-            this.Size = new Size(900, 750);
+            this.Size = new Size(900, 1020);
             this.Text = "Регистрация нового пользователя";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -47,7 +51,7 @@ namespace LibrarySystem.Forms
             };
 
             // Главная карточка
-            Panel cardPanel = ModernUIHelper.CreateCard(new Point(100, 40), new Size(700, 670));
+            Panel cardPanel = ModernUIHelper.CreateCard(new Point(100, 40), new Size(700, 960));
 
             // Заголовок с иконкой
             Label lblIcon = new Label
@@ -210,13 +214,121 @@ namespace LibrarySystem.Forms
                 txtConfirmPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
             };
 
+            // Телефон
+            Label lblPhone = ModernUIHelper.CreateModernLabel(
+                "ТЕЛЕФОН",
+                new Point(50, 505),
+                9,
+                FontStyle.Bold,
+                ModernUIHelper.TextMuted
+            );
+
+            Panel panelPhoneBox = new Panel
+            {
+                Location = new Point(50, 530),
+                Size = new Size(600, 45),
+                BackColor = ModernUIHelper.SidebarBackground
+            };
+
+            txtPhone = new TextBox
+            {
+                Location = new Point(15, 11),
+                Size = new Size(570, 30),
+                Font = new Font("Segoe UI", 11),
+                BackColor = ModernUIHelper.SidebarBackground,
+                ForeColor = ModernUIHelper.TextPrimary,
+                BorderStyle = BorderStyle.None
+            };
+            panelPhoneBox.Controls.Add(txtPhone);
+
+            // Email
+            Label lblEmail = ModernUIHelper.CreateModernLabel(
+                "EMAIL",
+                new Point(50, 585),
+                9,
+                FontStyle.Bold,
+                ModernUIHelper.TextMuted
+            );
+
+            Panel panelEmailBox = new Panel
+            {
+                Location = new Point(50, 610),
+                Size = new Size(600, 45),
+                BackColor = ModernUIHelper.SidebarBackground
+            };
+
+            txtEmail = new TextBox
+            {
+                Location = new Point(15, 11),
+                Size = new Size(570, 30),
+                Font = new Font("Segoe UI", 11),
+                BackColor = ModernUIHelper.SidebarBackground,
+                ForeColor = ModernUIHelper.TextPrimary,
+                BorderStyle = BorderStyle.None
+            };
+            panelEmailBox.Controls.Add(txtEmail);
+
+            // Прописка (адрес)
+            Label lblAddress = ModernUIHelper.CreateModernLabel(
+                "ПРОПИСКА (АДРЕС)",
+                new Point(50, 665),
+                9,
+                FontStyle.Bold,
+                ModernUIHelper.TextMuted
+            );
+
+            Panel panelAddressBox = new Panel
+            {
+                Location = new Point(50, 690),
+                Size = new Size(600, 45),
+                BackColor = ModernUIHelper.SidebarBackground
+            };
+
+            txtAddress = new TextBox
+            {
+                Location = new Point(15, 11),
+                Size = new Size(570, 30),
+                Font = new Font("Segoe UI", 11),
+                BackColor = ModernUIHelper.SidebarBackground,
+                ForeColor = ModernUIHelper.TextPrimary,
+                BorderStyle = BorderStyle.None
+            };
+            panelAddressBox.Controls.Add(txtAddress);
+
+            // Номер родителей
+            Label lblParentPhone = ModernUIHelper.CreateModernLabel(
+                "ТЕЛЕФОН РОДИТЕЛЕЙ",
+                new Point(50, 745),
+                9,
+                FontStyle.Bold,
+                ModernUIHelper.TextMuted
+            );
+
+            Panel panelParentPhoneBox = new Panel
+            {
+                Location = new Point(50, 770),
+                Size = new Size(600, 45),
+                BackColor = ModernUIHelper.SidebarBackground
+            };
+
+            txtParentPhone = new TextBox
+            {
+                Location = new Point(15, 11),
+                Size = new Size(570, 30),
+                Font = new Font("Segoe UI", 11),
+                BackColor = ModernUIHelper.SidebarBackground,
+                ForeColor = ModernUIHelper.TextPrimary,
+                BorderStyle = BorderStyle.None
+            };
+            panelParentPhoneBox.Controls.Add(txtParentPhone);
+
             // Разделитель
-            Panel divider2 = ModernUIHelper.CreateDivider(new Point(20, 520), 660);
+            Panel divider2 = ModernUIHelper.CreateDivider(new Point(20, 825), 660);
 
             // Кнопки
             btnRegister = ModernUIHelper.CreateGradientButton(
                 "ЗАРЕГИСТРИРОВАТЬСЯ",
-                new Point(50, 555),
+                new Point(50, 860),
                 new Size(600, 50),
                 ModernUIHelper.SuccessColor,
                 ColorTranslator.FromHtml("#00a67d")
@@ -252,6 +364,14 @@ namespace LibrarySystem.Forms
             cardPanel.Controls.Add(lblConfirmPassword);
             cardPanel.Controls.Add(panelConfirmPasswordBox);
             cardPanel.Controls.Add(chkShowPassword);
+            cardPanel.Controls.Add(lblPhone);
+            cardPanel.Controls.Add(panelPhoneBox);
+            cardPanel.Controls.Add(lblEmail);
+            cardPanel.Controls.Add(panelEmailBox);
+            cardPanel.Controls.Add(lblAddress);
+            cardPanel.Controls.Add(panelAddressBox);
+            cardPanel.Controls.Add(lblParentPhone);
+            cardPanel.Controls.Add(panelParentPhoneBox);
             cardPanel.Controls.Add(divider2);
             cardPanel.Controls.Add(btnRegister);
             cardPanel.Controls.Add(btnCancel);
@@ -327,7 +447,11 @@ namespace LibrarySystem.Forms
                     Login = login,
                     Password = password,
                     FullName = fullName,
-                    Role = "User"
+                    Role = "User",
+                    Phone = txtPhone?.Text.Trim() ?? string.Empty,
+                    Email = txtEmail?.Text.Trim() ?? string.Empty,
+                    Address = txtAddress?.Text.Trim() ?? string.Empty,
+                    ParentPhone = txtParentPhone?.Text.Trim() ?? string.Empty
                 };
 
                 DatabaseHelper.RegisterUser(newUser);
